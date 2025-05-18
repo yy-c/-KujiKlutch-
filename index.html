@@ -2,12 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>神赐の究极一番赏启示录</title>
+    <title>神域の一番赏启示录</title>
     <style>
-        /* 暗夜星辰风格 */
         body {
             font-family: '游ゴシック', 'Yu Gothic', sans-serif;
-            max-width: 600px;
+            max-width: 500px;
             margin: 20px auto;
             padding: 20px;
             background: #2c1f3b url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-size="20" fill="%23ffffff22" dominant-baseline="middle" text-anchor="middle">✦</text></svg>');
@@ -16,43 +15,56 @@
 
         .container {
             background: rgba(17, 8, 30, 0.9);
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
             border: 1px solid #6a4c9c;
             box-shadow: 0 0 30px #4b2e6d80;
         }
 
         .input-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
             margin-bottom: 25px;
+        }
+
+        .input-group > div {
+            position: relative;
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            margin-bottom: 8px;
+            font-size: 0.95em;
             text-shadow: 0 0 5px #8e7dff;
+            white-space: nowrap;
         }
 
         input {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background: #1a1029;
             border: 2px solid #5d3d87;
-            border-radius: 8px;
+            border-radius: 6px;
             color: #d8c3ff;
-            font-size: 1.2em;
+            font-size: 1.1em;
+            transition: 0.3s all;
+        }
+
+        input:focus {
+            box-shadow: 0 0 15px #7f5af080;
+            border-color: #bf95ff;
         }
 
         button {
             background: linear-gradient(135deg, #7f5af0 0%, #2cb67d 100%);
             color: white;
-            padding: 15px;
+            padding: 12px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            width: 100%;
-            font-size: 1.3em;
-            letter-spacing: 2px;
+            font-size: 1.2em;
+            letter-spacing: 1px;
             transition: 0.3s all;
             text-shadow: 0 0 10px #ffffff80;
         }
@@ -63,50 +75,65 @@
         }
 
         .result {
-            margin-top: 30px;
-            padding: 25px;
+            margin-top: 25px;
+            padding: 20px;
             background: #26173a;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid #7f5af0;
             display: none;
         }
 
         .error {
             color: #ff3860;
-            margin: 20px 0;
-            padding: 15px;
+            margin: 15px 0;
+            padding: 12px;
             background: #3d0d1a;
             border: 2px solid #ff3860;
-            border-radius: 8px;
+            border-radius: 6px;
             display: none;
             text-shadow: 0 0 5px #ff000080;
+        }
+
+        @media (max-width: 480px) {
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+            
+            label::before {
+                content: "✦ ";
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 style="text-align:center;color:#bf95ff;text-shadow:0 0 20px #7f5af0;">✦ 天命轮转·一番赏启示录 ✦</h2>
+        <h2 style="text-align:center;color:#bf95ff;text-shadow:0 0 20px #7f5af0;margin-bottom:25px;">
+            ✦ 天命轮转·一番赏启示录 ✦
+        </h2>
         
         <div class="input-group">
-            <label for="total">🜁 命运之轮剩余转动次数(剩余抽奖总数)：</label>
-            <input type="number" id="total" placeholder="在此刻下神谕之数">
-        </div>
-        
-        <div class="input-group">
-            <label for="prizes">🝳 现世残留的究极赏数目(剩余大奖数量)：</label>
-            <input type="number" id="prizes" placeholder="以灵魂之重衡量">
+            <div>
+                <label for="total">🜁 命运轮转数(剩余抽奖次数)</label>
+                <input type="number" id="total" placeholder="神谕之数">
+            </div>
+            <div>
+                <label for="prizes">🝳 现世圣物数(剩余大奖数量)</label>
+                <input type="number" id="prizes" placeholder="魂之重量">
+            </div>
         </div>
 
         <div class="error" id="errorMsg"></div>
         
-        <button onclick="calculate()" style="margin-top:25px;">⚡ 发动命运演算 ⚡</button>
+        <button onclick="calculate()">⚡ 发动命运演算 ⚡</button>
 
         <div class="result" id="result">
-            <h3 style="color:#2cb67d;border-bottom:2px solid #2cb67d;padding-bottom:10px;">✨ 启示显现 ✨</h3>
-            <p>天命之数：<span id="average" style="color:#7f5af0;">∞</span></p>
-            <p>九重天界所需次数(90%中大奖)：<span id="90" style="color:#2cb67d;">★</span></p>
-            <p>星界回廊突破次数(95%中大奖)：<span id="95" style="color#ff7e67;">★★</span></p>
-            <p>虚空神域最终试炼(99%中大奖)：<span id="99" style="color:#ff3860;">★★★</span></p>
+            <h3 style="color:#2cb67d;border-bottom:2px solid #2cb67d;padding-bottom:8px;margin-bottom:15px;">
+                ✨ 天命显现 ✨
+            </h3>
+            <p>天命之数(平均中大奖次数)：<span id="average" style="color:#7f5af0;">∞</span></p>
+            <p>九重天境(90%中大奖次数)：<span id="90" style="color:#2cb67d;">★</span></p>
+            <p>星界回廊(95%中大奖次数)：<span id="95" style="color:#ff7e67;">★★</span></p>
+            <p>虚空神域(99%中大奖次数)：<span id="99" style="color:#ff3860;">★★★</span></p>
         </div>
     </div>
 
@@ -143,10 +170,10 @@
                 return k > 0 ? k : 1;
             }
 
-            document.getElementById('average').textContent = average + " 抽";
-            document.getElementById('90').textContent = calcConfidence(0.90) + " 抽";
-            document.getElementById('95').textContent = calcConfidence(0.95) + " 抽";
-            document.getElementById('99').textContent = calcConfidence(0.99) + " 抽";
+            document.getElementById('average').textContent = `${average} 抽`;
+            document.getElementById('90').textContent = `${calcConfidence(0.90)} 抽`;
+            document.getElementById('95').textContent = `${calcConfidence(0.95)} 抽`;
+            document.getElementById('99').textContent = `${calcConfidence(0.99)} 抽`;
             result.style.display = 'block';
         }
     </script>
