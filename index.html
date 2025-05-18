@@ -1,73 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>简易计算器</title>
+    <meta charset="UTF-8">
+    <title>神赐の究极一番赏启示录</title>
     <style>
-        /* 基础样式 */
-        .calculator {
-            width: 300px;
-            margin: 50px auto;
+        /* 暗夜星辰风格 */
+        body {
+            font-family: '游ゴシック', 'Yu Gothic', sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            background: #2c1f3b url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-size="20" fill="%23ffffff22" dominant-baseline="middle" text-anchor="middle">✦</text></svg>');
+            color: #e0d7ff;
         }
+
+        .container {
+            background: rgba(17, 8, 30, 0.9);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #6a4c9c;
+            box-shadow: 0 0 30px #4b2e6d80;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px #8e7dff;
+        }
+
         input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 12px;
+            background: #1a1029;
+            border: 2px solid #5d3d87;
+            border-radius: 8px;
+            color: #d8c3ff;
+            font-size: 1.2em;
         }
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-        }
+
         button {
-            padding: 10px;
+            background: linear-gradient(135deg, #7f5af0 0%, #2cb67d 100%);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            width: 100%;
+            font-size: 1.3em;
+            letter-spacing: 2px;
+            transition: 0.3s all;
+            text-shadow: 0 0 10px #ffffff80;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px #7f5af080;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #26173a;
+            border-radius: 12px;
+            border: 1px solid #7f5af0;
+            display: none;
+        }
+
+        .error {
+            color: #ff3860;
+            margin: 20px 0;
+            padding: 15px;
+            background: #3d0d1a;
+            border: 2px solid #ff3860;
+            border-radius: 8px;
+            display: none;
+            text-shadow: 0 0 5px #ff000080;
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <input type="text" id="display" readonly>
-        <div class="buttons">
-            <button onclick="clearDisplay()">C</button>
-            <button onclick="appendToDisplay('/')">/</button>
-            <button onclick="appendToDisplay('*')">×</button>
-            <button onclick="appendToDisplay('-')">-</button>
-            <button onclick="appendToDisplay('7')">7</button>
-            <button onclick="appendToDisplay('8')">8</button>
-            <button onclick="appendToDisplay('9')">9</button>
-            <button onclick="appendToDisplay('+')">+</button>
-            <button onclick="appendToDisplay('4')">4</button>
-            <button onclick="appendToDisplay('5')">5</button>
-            <button onclick="appendToDisplay('6')">6</button>
-            <button onclick="calculate()">=</button>
-            <button onclick="appendToDisplay('1')">1</button>
-            <button onclick="appendToDisplay('2')">2</button>
-            <button onclick="appendToDisplay('3')">3</button>
-            <button onclick="appendToDisplay('.')">.</button>
-            <button onclick="appendToDisplay('0')">0</button>
+    <div class="container">
+        <h2 style="text-align:center;color:#bf95ff;text-shadow:0 0 20px #7f5af0;">✦ 天命轮转·一番赏启示录 ✦</h2>
+        
+        <div class="input-group">
+            <label for="total">🜁 命运之轮剩余转动次数(剩余抽奖总数)：</label>
+            <input type="number" id="total" placeholder="在此刻下神谕之数">
+        </div>
+        
+        <div class="input-group">
+            <label for="prizes">🝳 现世残留的究极赏数目(剩余大奖数量)：</label>
+            <input type="number" id="prizes" placeholder="以灵魂之重衡量">
+        </div>
+
+        <div class="error" id="errorMsg"></div>
+        
+        <button onclick="calculate()" style="margin-top:25px;">⚡ 发动命运演算 ⚡</button>
+
+        <div class="result" id="result">
+            <h3 style="color:#2cb67d;border-bottom:2px solid #2cb67d;padding-bottom:10px;">✨ 启示显现 ✨</h3>
+            <p>天命之数：<span id="average" style="color:#7f5af0;">∞</span></p>
+            <p>九重天界所需次数(90%中大奖)：<span id="90" style="color:#2cb67d;">★</span></p>
+            <p>星界回廊突破次数(95%中大奖)：<span id="95" style="color#ff7e67;">★★</span></p>
+            <p>虚空神域最终试炼(99%中大奖)：<span id="99" style="color:#ff3860;">★★★</span></p>
         </div>
     </div>
 
     <script>
-        let display = document.getElementById('display');
-
-        function appendToDisplay(value) {
-            display.value += value;
-        }
-
-        function clearDisplay() {
-            display.value = '';
-        }
-
         function calculate() {
-            try {
-                display.value = eval(display.value);
-            } catch (error) {
-                display.value = '错误';
+            const total = parseInt(document.getElementById('total').value);
+            const prizes = parseInt(document.getElementById('prizes').value);
+            const error = document.getElementById('errorMsg');
+            const result = document.getElementById('result');
+
+            error.style.display = 'none';
+            result.style.display = 'none';
+
+            if (isNaN(total) || isNaN(prizes) || 
+                total <= 0 || prizes <= 0 ||
+                !Number.isInteger(total) || !Number.isInteger(prizes)) {
+                error.innerHTML = "❌ 凡骨！汝竟敢献上不洁之数！<br>速速以<strong style='color:#7f5af0'>正整数</strong>取悦神明！";
+                error.style.display = 'block';
+                return;
             }
+
+            if (prizes > total) {
+                error.innerHTML = "🜂 悖逆天道！<br>究极赏数目岂可逾越命运轮转之数！";
+                error.style.display = 'block';
+                return;
+            }
+
+            const p = prizes / total;
+            const average = (total / prizes).toFixed(2);
+
+            function calcConfidence(confidence) {
+                if (p >= 1) return 1;
+                const k = Math.ceil(Math.log(1 - confidence) / Math.log(1 - p));
+                return k > 0 ? k : 1;
+            }
+
+            document.getElementById('average').textContent = average + " 抽";
+            document.getElementById('90').textContent = calcConfidence(0.90) + " 抽";
+            document.getElementById('95').textContent = calcConfidence(0.95) + " 抽";
+            document.getElementById('99').textContent = calcConfidence(0.99) + " 抽";
+            result.style.display = 'block';
         }
     </script>
 </body>
