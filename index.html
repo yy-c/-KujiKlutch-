@@ -102,7 +102,7 @@
 <body>
     <div class="container">
         <h2 style="text-align:center;color:#bf95ff;text-shadow:0 0 20px #7f5af0;margin-bottom:25px;">
-            ✦ 天命轮转·一番赏启示录 ✦
+            ✦ 天命の一番赏启示录 ✦
         </h2>
         <div class="input-group">
         <div>
@@ -157,10 +157,26 @@
             const p = prizes / total;
             const average = (total / prizes).toFixed(2);
 
+            function comb(n, k) {
+                if (k < 0 || k > n) return 0;
+                if (k === 0 || k === n) return 1;
+                let res = 1;
+                for (let i = 1; i <= k; i++) {
+                    res *= (n - i + 1) / i;
+                }
+                return res;
+            }
+
             function calcConfidence(confidence) {
-                if (p >= 1) return 1;
-                const k = Math.ceil(Math.log(1 - confidence) / Math.log(1 - p));
-                return k > 0 ? k : 1;
+                if (prizes >= total) return 1;
+                for (let k = 1; k <= total; k++) {
+                    const pNoPrize = comb(total - prizes, k) / comb(total, k);
+                    const pAtLeastOne = 1 - pNoPrize;
+                    if (pAtLeastOne >= confidence) {
+                        return k;
+                    }
+                }
+                return total;
             }
 
             document.getElementById('average').textContent = `${average} 抽`;
