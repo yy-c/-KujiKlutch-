@@ -20,24 +20,19 @@
             border: 1px solid #6a4c9c;
             box-shadow: 0 0 30px #4b2e6d80;
         }
-
-        .input-group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+        
+        .input-group > div {
             margin-bottom: 25px;
         }
 
-        .input-group > div {
-            position: relative;
+        .input-group {
+            display: block;
         }
 
         label {
+            font-size: 1.1em;
+            margin-bottom: 12px;
             display: block;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-            text-shadow: 0 0 5px #8e7dff;
-            white-space: nowrap;
         }
 
         input {
@@ -95,12 +90,11 @@
         }
 
         @media (max-width: 480px) {
-            .input-group {
-                grid-template-columns: 1fr;
+            label {
+                font-size: 0.8em;
             }
-            
-            label::before {
-                content: "✦ ";
+            input::placeholder {
+                font-size: 0.9em;
             }
         }
     </style>
@@ -110,13 +104,12 @@
         <h2 style="text-align:center;color:#bf95ff;text-shadow:0 0 20px #7f5af0;margin-bottom:25px;">
             ✦ 天命轮转·一番赏启示录 ✦
         </h2>
-        
         <div class="input-group">
-            <div>
-                <label for="total">🜁 命运轮转数(剩余抽奖次数)</label>
-                <input type="number" id="total" placeholder="神谕之数">
-            </div>
-            <div>
+        <div>
+            <label for="total">🜁 命运轮转数(剩余抽奖次数)</label>
+            <input type="number" id="total" placeholder="神谕之数">
+        </div>
+        <div>
                 <label for="prizes">🝳 现世圣物数(剩余大奖数量)</label>
                 <input type="number" id="prizes" placeholder="魂之重量">
             </div>
